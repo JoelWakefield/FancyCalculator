@@ -61,16 +61,24 @@ namespace FancyCalculator
 
             return true;
         }
-        static dynamic QnA(string question)
+        static void Run()
         {
+            var question = "Give me an equation in the following format: number opperator number";
+            
             do
             {
+                //  Prompt user for input
                 Console.WriteLine(question);
                 var result = Console.ReadLine();
-                double answer;
 
+                //  Check for quitters, lol
+                if (result == "exit")
+                    break;
+
+                //  Attempt calculation
+                double answer;
                 if (RunCalculation(result, out answer))
-                    return answer;
+                    Console.WriteLine($"Result: {answer}");
                 else
                     Reject(out answer);
             } while (true);
@@ -78,10 +86,9 @@ namespace FancyCalculator
         
         static void Main(string[] args)
         {
-            var answer = QnA("Give me an equation (please, separate the parts with a space): ");
+            Console.WriteLine("Fancy Calculator (enter 'exit' to quit)\n");
 
-            Console.WriteLine($"Here's those numbers added together: {answer}");
-            Console.ReadLine();
+            Run();
         }
     }
 }
