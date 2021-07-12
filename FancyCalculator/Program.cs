@@ -9,31 +9,52 @@ namespace FancyCalculator
             return Double.TryParse(str, out answer);
         }
 
-        static bool Reject(out double answer, string message = null)
+        static bool Reject(string message = null)
         {
             if (!String.IsNullOrWhiteSpace(message))
                 Console.WriteLine(message);
-            answer = 0;
+            //answer = 0;
             return false;
         }
 
-        static bool RunCalculation(string input, out double answer)
+        static bool RunCalculation(string input, ref double answer)
         {
+            //  Break apart the input
             var parts = input.Split(" ");
 
-            //  Check to ensure enough pieces are present
-            if (parts.Length != 3)
-                return Reject(out answer, "Please, make sure there are 3 pieces to your input, for example: 5 + 2");
- 
-            //  Check if the inputs are valid
-            var str1 = parts[0];
-            var str2 = parts[2];
-            double num1, num2;
+            //  Setup varaibles
+            double num1 = 0;
+            double num2 = 0;
+            string opp;
+            bool validInputs = false;
 
-            if (IsNumber(str1, out num1) & IsNumber(str2, out num2))
+            //  Check to ensure the formatting is correct
+            if (parts.Length == 3)
+            {
+                opp = parts[1];
+
+                validInputs = IsNumber(parts[0], out num1) & IsNumber(parts[2], out num2);
+            }
+            else if (parts.Length == 2)
+            {
+                opp = parts[0];
+                num1 = answer;
+
+                validInputs = IsNumber(parts[1], out num2);
+            }
+            else
+            {
+                return Reject("There must be one opperator and one or two numbers, " +
+                    "\n\teither as a new opperation { 5 + 2 }," +
+                    "\n\tor appending an existing value { + 2 }");
+            }
+
+            //  Check if the inputs are valid
+            
+            if (validInputs)
             {
                 //  Check the opperator
-                switch (parts[1])
+                switch (opp)
                 {
                     case "+":
                         answer = num1 + num2;
@@ -51,12 +72,12 @@ namespace FancyCalculator
                         answer = num1 % num2;
                         break;
                     default:
-                        return Reject(out answer, "Please, enter a valid opperator; ie, one listed here [ + , - , * , / , % ].");
+                        return Reject("Please, enter a valid opperator; ie, one listed here [ + , - , * , / , % ].");
                 }
             }
             else
             {
-                return Reject(out answer, "Numbers are invalid. Lets try that again...");
+                return Reject("Numbers are invalid. Lets try that again...");
             }
 
             return true;
@@ -64,6 +85,7 @@ namespace FancyCalculator
         static void Run()
         {
             var question = "Give me an equation in the following format: number opperator number";
+            double answer = 0;
             
             do
             {
@@ -76,11 +98,10 @@ namespace FancyCalculator
                     break;
 
                 //  Attempt calculation
-                double answer;
-                if (RunCalculation(result, out answer))
-                    Console.WriteLine($"Result: {answer}");
+                if (RunCalculation(result, ref answer))
+                    Console.WriteLine($"{result} = {answer}");
                 else
-                    Reject(out answer);
+                    Reject();
             } while (true);
         }
         
