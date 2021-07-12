@@ -22,7 +22,7 @@ namespace CalculatorCore
                 return $"{Num1} {Opperator} {Num2} = {Answer}";
             }
             else
-                return ErrorMessage;
+                return $"\u001b[31m{ErrorMessage}\u001b[0m";
         }
 
         private string Tabs(int count)
