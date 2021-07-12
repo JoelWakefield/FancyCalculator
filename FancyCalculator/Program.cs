@@ -23,7 +23,7 @@ namespace FancyCalculator
 
             //  Check to ensure enough pieces are present
             if (parts.Length != 3)
-                return Reject(out answer, "Please, make sure there are 3 pieces to your input.");
+                return Reject(out answer, "Please, make sure there are 3 pieces to your input, for example: 5 + 2");
  
             //  Check if the inputs are valid
             var str1 = parts[0];
