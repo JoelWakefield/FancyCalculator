@@ -63,7 +63,7 @@ namespace FancyCalculator
                 if (RunCalculation(result, out answer))
                     return answer;
                 else
-                    Console.WriteLine("Lets try that again...");
+                    Console.WriteLine("Numbers are invalid. Lets try that again...");
             } while (true);
         }
         
