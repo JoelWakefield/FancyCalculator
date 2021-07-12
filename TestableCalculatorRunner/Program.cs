@@ -10,7 +10,7 @@ namespace TestableCalculatorRunner
             Console.WriteLine("This is the testable runner.\n");
 
             var calculator = new Calculator();
-            calculator.Run();
+            //calculator.Run();
         }
     }
 }

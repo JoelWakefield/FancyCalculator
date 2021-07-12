@@ -13,10 +13,26 @@ namespace CalculatorCore
         public string Opperator { get; set; }
         public double Answer { get; set; }
         public bool IsHead { get; set; } = false;   //  Is this the first evaluation in a sequence
+        public string ErrorMessage { get; set; }
 
-        public string Result() {
-            var head = IsHead ? Num1.ToString() : "";
-            return $"{head} {Opperator} {Num2} = {Answer}";
+        public string Result(int tab1 = 0, int tab2 = 0) {
+            if (String.IsNullOrWhiteSpace(ErrorMessage))
+            {
+                //var head = IsHead ? Num1.ToString() : "";
+                return $"{Num1} {Opperator} {Num2} = {Answer}";
+            }
+            else
+                return ErrorMessage;
+        }
+
+        private string Tabs(int count)
+        {
+            var msg = "";
+
+            for (int i = 0; i < count; i++)
+                msg += "\t";
+
+            return msg;
         }
     }
 }
