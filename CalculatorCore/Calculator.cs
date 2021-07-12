@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FancyCalculator
+namespace CalculatorCore
 {
-    class Calculator
+    public class Calculator
     {
-        private List<Calculation> history = new List<Calculation>();
+        private List<Evaluation> history = new List<Evaluation>();
 
         dynamic IsNumber(string str, out double answer)
         {
@@ -25,22 +25,32 @@ namespace FancyCalculator
 
         void AppendHistory(double num1, string opp, double num2, double ans)
         {
-            history.Add(new Calculation
+            history.Add(new Evaluation
             {
                 Num1 = num1,
                 Num2 = num2,
                 Opperator = opp,
                 Answer = ans
             });
+
+            if (history.Count == 1)
+                history.FirstOrDefault().IsHead = true;
         }
 
-        bool RunCalculation(string input, ref double answer)
+        public Evaluation Eval(string input)
+        {
+            double answer = 0;
+            Evaluate(input, ref answer);
+            return history.Last();
+        }
+
+        public bool Evaluate(string input, ref double answer)
         {
             //  Break apart the input
             var parts = input.Split(" ");
 
             //  Setup varaibles
-            Calculation calculation = new Calculation();
+            Evaluation calculation = new Evaluation();
             double num1 = 0;
             double num2 = 0;
             string opp;
@@ -111,7 +121,7 @@ namespace FancyCalculator
         {
             //  Get the longest string of commands
             history.ForEach(c => {
-                Console.WriteLine(c);
+                Console.WriteLine(c.Result());
             });
         }
 
@@ -126,12 +136,12 @@ namespace FancyCalculator
                 Console.WriteLine(question);
                 var result = Console.ReadLine();
 
-                
+
                 if (result == "exit")   //  Check for quitters, lol
                     break;
                 else if (result == "history")   //  Show history
                     ShowHistory();
-                else if (RunCalculation(result, ref answer)) //  Attempt calculation
+                else if (Evaluate(result, ref answer)) //  Attempt calculation
                 {
                     Console.WriteLine($"{result} = {answer}");
                 }
@@ -140,5 +150,6 @@ namespace FancyCalculator
 
             } while (true);
         }
+
     }
 }
