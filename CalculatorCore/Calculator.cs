@@ -8,6 +8,7 @@ namespace CalculatorCore
 {
     public class Calculator
     {
+        private double CurrentResult;
 
         public Evaluation Evaluate(string input)
         {
@@ -18,7 +19,6 @@ namespace CalculatorCore
             Evaluation ev = new Evaluation();
             double num1;
             double num2;
-            bool validInputs;
 
             //  Check to ensure the formatting is correct
             if (parts.Length == 3)
@@ -31,43 +31,53 @@ namespace CalculatorCore
                 
                 if (!IsNumber(parts[2], out num2))
                     return new Evaluation { ErrorMessage = $"{parts[2]} must be a numeric value." };
+            }
+            else if (parts.Length == 2)
+            {
+                num1 = CurrentResult;
+                ev.Opperator = parts[0];
 
-                ev.Num1 = num1;
-                ev.Num2 = num2;
-
-                //  Check the opperator
-                switch (ev.Opperator)
-                {
-                    case "+":
-                        ev.Answer = num1 + num2;
-                        break;
-                    case "-":
-                        ev.Answer = num1 - num2;
-                        break;
-                    case "*":
-                        ev.Answer = num1 * num2;
-                        break;
-                    case "/":
-                        ev.Answer = num1 / num2;
-                        break;
-                    case "%":
-                        ev.Answer = num1 % num2;
-                        break;
-                    default:
-                        return new Evaluation { ErrorMessage = $"{ev.Opperator} is an invalid operator. Please, only use the following: [ + , - , * , / , % ]." };
-                }
+                //  Check if the inputs are valid
+                if (!IsNumber(parts[1], out num2))
+                    return new Evaluation { ErrorMessage = $"{parts[1]} must be a numeric value." };
             }
             else
             {
                 return new Evaluation
                 {
                     ErrorMessage = "There must be one opperator and one or two numbers, " +
-                    "\n\teither as a new opperation { 5 + 2 }," +
-                    "\n\tor appending an existing value { + 2 }"
+                        "\n\teither as a new opperation: [ 5 + 2 ]," +
+                        "\n\tor appending an existing value: [ + 2 ]"
                 };
             }
 
+            ev.Num1 = num1;
+            ev.Num2 = num2;
 
+            //  Check the opperator
+            switch (ev.Opperator)
+            {
+                case "+":
+                    ev.Answer = num1 + num2;
+                    break;
+                case "-":
+                    ev.Answer = num1 - num2;
+                    break;
+                case "*":
+                    ev.Answer = num1 * num2;
+                    break;
+                case "/":
+                    ev.Answer = num1 / num2;
+                    break;
+                case "%":
+                    ev.Answer = num1 % num2;
+                    break;
+                default:
+                    return new Evaluation { ErrorMessage = $"{ev.Opperator} is an invalid operator. Please, only use the following: [ + , - , * , / , % ]." };
+            }
+
+            //  Set the ongoing result
+            CurrentResult = ev.Answer;
 
             return ev;
         }

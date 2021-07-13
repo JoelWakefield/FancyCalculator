@@ -16,14 +16,14 @@ namespace CalculatorCore.Tests
         }
 
         [TestMethod]
-        public void IncorrectInput()
+        public void IncorrectNumberOfInputs()
         {
             //  Act
             var input = "r";
             var result = calc.Evaluate(input).Result();
             string expected = "There must be one opperator and one or two numbers, " +
-                    "\n\teither as a new opperation { 5 + 2 }," +
-                    "\n\tor appending an existing value { + 2 }";
+                "\n\teither as a new opperation: [ 5 + 2 ]," +
+                "\n\tor appending an existing value: [ + 2 ]";
 
             //  Assert
             Assert.AreEqual(expected, result);
