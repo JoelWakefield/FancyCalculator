@@ -19,10 +19,11 @@ namespace CalculatorCore.Tests
         public void IncorrectInput()
         {
             //  Act
-            var result = calc.Evaluate("r").Result();
+            var input = "r";
+            var result = calc.Evaluate(input).Result();
             string expected = "There must be one opperator and one or two numbers, " +
-                "\n\teither as a new opperation { 5 + 2 }," +
-                "\n\tor appending an existing value { + 2 }";
+                    "\n\teither as a new opperation { 5 + 2 }," +
+                    "\n\tor appending an existing value { + 2 }";
 
             //  Assert
             Assert.AreEqual(expected, result);
@@ -32,8 +33,9 @@ namespace CalculatorCore.Tests
         public void InvalidOperator()
         {
             //  Act
-            var result = calc.Evaluate("3 d 4").Result();
-            string expected = "Please, enter a valid opperator; ie, one listed here [ + , - , * , / , % ].";
+            var op = "plus";
+            var result = calc.Evaluate($"3 {op} 4").Result();
+            string expected = $"{op} is an invalid operator. Please, only use the following: [ + , - , * , / , % ].";
 
             //  Assert
             Assert.AreEqual(expected, result);
@@ -44,7 +46,7 @@ namespace CalculatorCore.Tests
         {
             //  Act
             var result = calc.Evaluate("re + 12").Result();
-            string expected = "Numbers are invalid. Lets try that again...";
+            string expected = $"re must be a numeric value.";
 
             //  Assert
             Assert.AreEqual(expected, result);

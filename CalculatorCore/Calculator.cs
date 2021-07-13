@@ -26,22 +26,15 @@ namespace CalculatorCore
                 ev.Opperator = parts[1];
 
                 //  Check if the inputs are valid
-                validInputs = IsNumber(parts[0], out num1) & IsNumber(parts[2], out num2);
+                if (!IsNumber(parts[0], out num1))
+                    return new Evaluation { ErrorMessage = $"{parts[0]} must be a numeric value." };
+                
+                if (!IsNumber(parts[2], out num2))
+                    return new Evaluation { ErrorMessage = $"{parts[2]} must be a numeric value." };
 
                 ev.Num1 = num1;
                 ev.Num2 = num2;
-            }
-            else
-            {
-                ev.ErrorMessage = "There must be one opperator and one or two numbers, " +
-                    "\n\teither as a new opperation { 5 + 2 }," +
-                    "\n\tor appending an existing value { + 2 }";
 
-                return ev;
-            }
-
-            if (validInputs)
-            {
                 //  Check the opperator
                 switch (ev.Opperator)
                 {
@@ -61,15 +54,20 @@ namespace CalculatorCore
                         ev.Answer = num1 % num2;
                         break;
                     default:
-                        ev.ErrorMessage = "Please, enter a valid opperator; ie, one listed here [ + , - , * , / , % ].";
-                        return ev;
+                        return new Evaluation { ErrorMessage = $"{ev.Opperator} is an invalid operator. Please, only use the following: [ + , - , * , / , % ]." };
                 }
             }
             else
             {
-                ev.ErrorMessage = "Numbers are invalid. Lets try that again...";
-                return ev;
+                return new Evaluation
+                {
+                    ErrorMessage = "There must be one opperator and one or two numbers, " +
+                    "\n\teither as a new opperation { 5 + 2 }," +
+                    "\n\tor appending an existing value { + 2 }"
+                };
             }
+
+
 
             return ev;
         }
