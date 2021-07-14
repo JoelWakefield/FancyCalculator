@@ -86,21 +86,5 @@ namespace CalculatorCore
         {
             return Double.TryParse(str, out answer);
         }
-
-        public void Run()
-        {
-            var question = "Give me an equation in the following format: number opperator number";
-
-            do
-            {
-                Console.WriteLine(question);
-                var input = Console.ReadLine();
-
-                var result = Evaluate(input);
-
-                Console.WriteLine(result.Result());
-
-            } while (true);
-        }
     }
 }
