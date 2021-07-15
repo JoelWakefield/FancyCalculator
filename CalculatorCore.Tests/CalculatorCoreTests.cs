@@ -106,5 +106,16 @@ namespace CalculatorCore.Tests
             //  Assert
             Assert.AreEqual(expected, result);
         }
+
+        [TestMethod]
+        public void TestLastResult()
+        {
+            //  Act
+            var result = calc.Evaluate("+ 5","5").Result();
+            string expected = "5 + 5 = 10";
+
+            //  Assert
+            Assert.AreEqual(expected, result);
+        }
     }
 }

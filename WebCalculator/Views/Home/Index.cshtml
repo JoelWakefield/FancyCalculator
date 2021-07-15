@@ -1,16 +1,12 @@
-﻿@model String 
+﻿@model String
 @{
-    ViewData["Title"] = "Calculator";
+    ViewData["Title"] = "Math is fun?";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Lets Crunch Some Numbers</h1>
+    <h1 class="display-4">Hello, @(Model == null ? "what's your name?" : $"{Model}" )</h1>
 
     <form action="/Home/Index" method="post">
-        <input type="text" name="evaluation" value="" />
+        <input type="text" name="name" value="" />
     </form>
-
-    <div>
-        @Model
-    </div>
 </div>

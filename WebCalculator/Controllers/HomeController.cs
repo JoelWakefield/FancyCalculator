@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using CalculatorCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -14,34 +13,30 @@ namespace WebCalculator.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly Calculator _calc;
-        private string LastResultSessionKey = "lastResult";
+        private string UserNameSessionKey = "username";
 
-        public HomeController(ILogger<HomeController> logger, Calculator calc)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _calc = calc;
+        }
+
+        [HttpPost]
+        public IActionResult Index(string name)
+        {
+            if (String.IsNullOrWhiteSpace(name))
+                return View();
+            else
+            {
+                HttpContext.Session.SetString(UserNameSessionKey, name);
+                return View("Index",name);
+            }
         }
 
         public IActionResult Index()
         {
-            var lastResult = HttpContext.Session.GetString(LastResultSessionKey);
+            var name = HttpContext.Session.GetString(UserNameSessionKey);
 
-            if (lastResult == null)
-                return View();
-            else
-                return View("Index", lastResult);
-        }
-
-        [HttpPost]
-        public IActionResult Index(string evaluation)
-        {
-            var lastResult = HttpContext.Session.GetString(LastResultSessionKey);
-            var result = _calc.Evaluate(evaluation, lastResult).Answer.ToString();
-
-            HttpContext.Session.SetString(LastResultSessionKey, result);
-
-            return View("Index",result);
+            return (name == null) ? View() : View("Index", name);
         }
 
         public IActionResult Privacy()

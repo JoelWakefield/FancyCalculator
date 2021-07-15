@@ -13,7 +13,7 @@ namespace CalculatorCore
         public Evaluation Evaluate(string input, string lastResult = null)
         {
             //  If the input has the first part missing, then add the last result
-            if (lastResult != null)
+            if (input.Split(" ").Length == 2 && lastResult != null)
                 input = lastResult + ' ' + input;
 
             //Break apart the input
@@ -35,15 +35,6 @@ namespace CalculatorCore
                 
                 if (!IsNumber(parts[2], out num2))
                     return new Evaluation { ErrorMessage = $"{parts[2]} must be a numeric value." };
-            }
-            else if (parts.Length == 2)
-            {
-                num1 = CurrentResult;
-                ev.Opperator = parts[0];
-
-                //  Check if the inputs are valid
-                if (!IsNumber(parts[1], out num2))
-                    return new Evaluation { ErrorMessage = $"{parts[1]} must be a numeric value." };
             }
             else
             {
