@@ -1,16 +1,16 @@
-﻿@model String 
+﻿@model WebCalculator.Models.SessionData
 @{
     ViewData["Title"] = "Calculator";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Lets Crunch Some Numbers</h1>
+    <h1 class="display-4">Lets Crunch Some Numbers @(Model.UserName ?? "")</h1>
 
     <form action="/Calculator/Index" method="post">
         <input type="text" name="evaluation" value="" />
     </form>
 
     <div>
-        <b>Last Result: </b>@Model
+        <b>Last Result: </b>@(Model.LastResult ?? "")
     </div>
 </div>

@@ -6,6 +6,7 @@ using CalculatorCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WebCalculator.Models;
 
 namespace WebCalculator.Controllers
 {
@@ -14,6 +15,7 @@ namespace WebCalculator.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly Calculator _calc;
         private string LastResultSessionKey = "lastResult";
+        private string UserNameSessionKey = "username";
 
         public CalculatorController(ILogger<HomeController> logger, Calculator calc)
         {
@@ -24,8 +26,15 @@ namespace WebCalculator.Controllers
         public IActionResult Index()
         {
             var lastResult = HttpContext.Session.GetString(LastResultSessionKey);
+            var username = HttpContext.Session.GetString(UserNameSessionKey);
 
-            return (lastResult == null) ? View() : View("Index", lastResult);
+            var vm = new SessionData
+            {
+                UserName = username,
+                LastResult = lastResult
+            };
+
+            return View("Index", vm);
         }
 
         [HttpPost]
@@ -33,10 +42,17 @@ namespace WebCalculator.Controllers
         {
             var lastResult = HttpContext.Session.GetString(LastResultSessionKey);
             var result = _calc.Evaluate(evaluation, lastResult).Answer.ToString();
-
             HttpContext.Session.SetString(LastResultSessionKey, result);
 
-            return View("Index", result);
+            var username = HttpContext.Session.GetString(UserNameSessionKey);
+
+            var vm = new SessionData
+            {
+                UserName = username,
+                LastResult = result
+            };
+
+            return View("Index", vm);
         }
     }
 }
