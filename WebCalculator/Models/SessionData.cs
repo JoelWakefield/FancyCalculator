@@ -9,5 +9,6 @@ namespace WebCalculator.Models
     {
         public string UserName { get; set; }
         public string LastResult { get; set; }
+        public string Error { get; set; }
     }
 }

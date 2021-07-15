@@ -17,9 +17,12 @@ namespace CalculatorCore
 
         public string Result(bool colored = false) {
             string msg;
-
+            
             if (String.IsNullOrWhiteSpace(ErrorMessage))
-                msg = $"{Num1} {Opperator} {Num2} = {Answer}";
+            {
+                string head = IsHead ? Num1 + " " : "";
+                msg = $"{head} {Opperator} {Num2} = {Answer}";
+            }
             else
                 msg = ErrorMessage;
 

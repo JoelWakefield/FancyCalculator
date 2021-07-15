@@ -1,0 +1,27 @@
+﻿@model IEnumerable<CalculatorCore.Evaluation>
+
+<h2>History</h2>
+
+@if (Model == null)
+{
+    <p>You've got nothin' to show for.</p>
+}
+else
+{
+    <div>
+        <span>
+            <a href="/calculator/history/add">add</a>
+            <a href="/calculator/history/sub">sub</a>
+            <a href="/calculator/history/mul">mul</a>
+            <a href="/calculator/history/div">div</a>
+            <a href="/calculator/history/mod">mod</a>
+        </span>
+
+        <ul style="list-style-type: none;">
+            @foreach (var evaluation in Model)
+            {
+                <li>@evaluation.Result()</li>
+            }
+        </ul>
+    </div>
+}

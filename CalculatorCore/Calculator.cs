@@ -12,15 +12,18 @@ namespace CalculatorCore
 
         public Evaluation Evaluate(string input, string lastResult = null)
         {
+            Evaluation ev = new Evaluation();
+
             //  If the input has the first part missing, then add the last result
             if (input.Split(" ").Length == 2 && lastResult != null)
                 input = lastResult + ' ' + input;
+            else
+                ev.IsHead = true;
 
             //Break apart the input
             var parts = input.Split(" ");
 
             //  Setup varaibles
-            Evaluation ev = new Evaluation();
             double num1;
             double num2;
 

@@ -6,6 +6,7 @@ using CalculatorCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SessionOnSession;
 using WebCalculator.Models;
 
 namespace WebCalculator.Controllers
@@ -16,6 +17,7 @@ namespace WebCalculator.Controllers
         private readonly Calculator _calc;
         private string LastResultSessionKey = "lastResult";
         private string UserNameSessionKey = "username";
+        private string HistorySessionKey = "history";
 
         public CalculatorController(ILogger<HomeController> logger, Calculator calc)
         {
@@ -25,8 +27,8 @@ namespace WebCalculator.Controllers
 
         public IActionResult Index()
         {
-            var lastResult = HttpContext.Session.GetString(LastResultSessionKey);
             var username = HttpContext.Session.GetString(UserNameSessionKey);
+            var lastResult = HttpContext.Session.GetString(LastResultSessionKey);
 
             var vm = new SessionData
             {
@@ -38,21 +40,55 @@ namespace WebCalculator.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(string evaluation)
+        public IActionResult Index(string input)
         {
-            var lastResult = HttpContext.Session.GetString(LastResultSessionKey);
-            var result = _calc.Evaluate(evaluation, lastResult).Answer.ToString();
-            HttpContext.Session.SetString(LastResultSessionKey, result);
-
             var username = HttpContext.Session.GetString(UserNameSessionKey);
+            var lastResult = HttpContext.Session.GetString(LastResultSessionKey);
+
+            var evaluation = _calc.Evaluate(input, lastResult);
+            
+            if (String.IsNullOrWhiteSpace(evaluation.ErrorMessage))
+            {
+                lastResult = evaluation.Answer.ToString();
+                HttpContext.Session.SetString(LastResultSessionKey, lastResult);
+
+                EvaluationHistory history = HttpContext.Session.Get<EvaluationHistory>(HistorySessionKey);
+
+                if (history == null)
+                    history = new EvaluationHistory();
+                history.Evaluations.Add(evaluation);
+
+                HttpContext.Session.Set(HistorySessionKey, history);
+            }
 
             var vm = new SessionData
             {
                 UserName = username,
-                LastResult = result
+                LastResult = lastResult,
+                Error = evaluation.ErrorMessage
             };
 
             return View("Index", vm);
+        }
+
+        public IActionResult History()
+        {
+            var history = HttpContext.Session.Get<EvaluationHistory>(HistorySessionKey);
+            if (history == null)
+                return View();
+            else
+                return View("History", history.Get());
+        }
+
+        [HttpGet]
+        [Route("calculator/history/{operand}")]
+        public IActionResult History(string operand)
+        {
+            var history = HttpContext.Session.Get<EvaluationHistory>(HistorySessionKey);
+            if (history == null)
+                return View();
+            else
+                return View("History", history.Get(operand));
         }
     }
 }

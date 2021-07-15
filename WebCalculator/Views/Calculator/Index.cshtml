@@ -7,8 +7,15 @@
     <h1 class="display-4">Lets Crunch Some Numbers @(Model.UserName ?? "")</h1>
 
     <form action="/Calculator/Index" method="post">
-        <input type="text" name="evaluation" value="" />
+        <input type="text" name="input" value="" />
     </form>
+
+    @if (Model.Error != null)
+    {
+        <div>
+            @Model.Error
+        </div>
+    }
 
     <div>
         <b>Last Result: </b>@(Model.LastResult ?? "")
