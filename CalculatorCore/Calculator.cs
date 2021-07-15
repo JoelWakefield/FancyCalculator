@@ -10,8 +10,12 @@ namespace CalculatorCore
     {
         private double CurrentResult;
 
-        public Evaluation Evaluate(string input)
+        public Evaluation Evaluate(string input, string lastResult = null)
         {
+            //  If the input has the first part missing, then add the last result
+            if (lastResult != null)
+                input = lastResult + ' ' + input;
+
             //Break apart the input
             var parts = input.Split(" ");
 
