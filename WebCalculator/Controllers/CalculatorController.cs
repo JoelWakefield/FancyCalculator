@@ -73,6 +73,8 @@ namespace WebCalculator.Controllers
 
         public IActionResult History()
         {
+            ViewBag.IsFiltered = false;
+
             var history = HttpContext.Session.Get<EvaluationHistory>(HistorySessionKey);
             if (history == null)
                 return View();
@@ -84,6 +86,8 @@ namespace WebCalculator.Controllers
         [Route("calculator/history/{operand}")]
         public IActionResult History(string operand)
         {
+            ViewBag.IsFiltered = true;
+
             var history = HttpContext.Session.Get<EvaluationHistory>(HistorySessionKey);
             if (history == null)
                 return View();

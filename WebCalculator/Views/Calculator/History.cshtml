@@ -18,7 +18,8 @@
 
 <div class="text-center">
 
-<h2>History</h2>
+    <a class="nav-link text-dark" href="/calculator/history"><h2>History</h2></a>
+
     <span id="links">
         <a href="/calculator/history/add">ADD</a>
         <a href="/calculator/history/sub">SUB</a>
@@ -33,7 +34,7 @@
                 <th>Number1</th>
                 <th>Operand</th>
                 <th>Number2</th>
-                <th>=</th>
+                <th>Equals</th>
                 <th>Answer</th>
             </tr>
         </thead>
@@ -41,7 +42,7 @@
             @foreach (var evaluation in Model)
             {
                 <tr>
-                    <td>@(evaluation.IsHead ? evaluation.Num1 : "")</td>
+                    <td>@evaluation.ShowNum1(ViewBag.IsFiltered)</td>
                     <td>@evaluation.Opperator</td>
                     <td>@evaluation.Num2</td>
                     <td>=</td>

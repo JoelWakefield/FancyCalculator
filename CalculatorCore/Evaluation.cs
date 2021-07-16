@@ -15,14 +15,16 @@ namespace CalculatorCore
         public bool IsHead { get; set; } = false;   //  Is this the first evaluation in a sequence
         public string ErrorMessage { get; set; }
 
-        public string Result(bool colored = false) {
+        public string ShowNum1(bool isFiltered = false)
+        {
+            return IsHead ? Num1.ToString() : (isFiltered ? $"_{Num1}_" : "");
+        }
+
+        public string Result(bool colored = false, bool isFiltered = false) {
             string msg;
             
             if (String.IsNullOrWhiteSpace(ErrorMessage))
-            {
-                string head = IsHead ? Num1 + " " : "";
-                msg = $"{head} {Opperator} {Num2} = {Answer}";
-            }
+                msg = $"{ShowNum1(isFiltered)} {Opperator} {Num2} = {Answer}";
             else
                 msg = ErrorMessage;
 
