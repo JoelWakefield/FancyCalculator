@@ -1,27 +1,53 @@
 ﻿@model IEnumerable<CalculatorCore.Evaluation>
 
+<style>
+    #links {
+        margin: 1em 0;
+    }
+
+    a {
+        margin: 0 .4em;
+    }
+
+    table {
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
+<div class="text-center">
+
 <h2>History</h2>
+    <span id="links">
+        <a href="/calculator/history/add">ADD</a>
+        <a href="/calculator/history/sub">SUB</a>
+        <a href="/calculator/history/mul">MUL</a>
+        <a href="/calculator/history/div">DIV</a>
+        <a href="/calculator/history/mod">MOD</a>
+    </span>
 
-@if (Model == null)
-{
-    <p>You've got nothin' to show for.</p>
-}
-else
-{
-    <div>
-        <span>
-            <a href="/calculator/history/add">add</a>
-            <a href="/calculator/history/sub">sub</a>
-            <a href="/calculator/history/mul">mul</a>
-            <a href="/calculator/history/div">div</a>
-            <a href="/calculator/history/mod">mod</a>
-        </span>
-
-        <ul style="list-style-type: none;">
+    <table>
+        <thead>
+            <tr>
+                <th>Number1</th>
+                <th>Operand</th>
+                <th>Number2</th>
+                <th>=</th>
+                <th>Answer</th>
+            </tr>
+        </thead>
+        <tbody>
             @foreach (var evaluation in Model)
             {
-                <li>@evaluation.Result()</li>
+                <tr>
+                    <td>@(evaluation.IsHead ? evaluation.Num1 : "")</td>
+                    <td>@evaluation.Opperator</td>
+                    <td>@evaluation.Num2</td>
+                    <td>=</td>
+                    <td>@evaluation.Answer</td>
+                </tr>
             }
-        </ul>
-    </div>
-}
+        </tbody>
+    </table>
+</div>
